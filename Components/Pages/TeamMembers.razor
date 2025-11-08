@@ -1,0 +1,37 @@
+@page "/team"
+   @rendermode InteractiveServer
+
+   <PageTitle>Team Members</PageTitle>
+
+   <h1>Our Team</h1>
+
+   <div class="row">
+       @foreach (var member in teamMembers)
+       {
+           <div class="col-md-4 mb-3">
+               <div class="card">
+                   <div class="card-body">
+                       <h5 class="card-title">@member.Name</h5>
+                       <p class="card-text">@member.Role</p>
+                       <p class="text-muted">@string.Join(", ", member.Skills)</p>
+                   </div>
+               </div>
+           </div>
+       }
+   </div>
+
+   @code {
+       private List<TeamMember> teamMembers = new()
+       {
+           new TeamMember { Name = "Member 1", Role = "Frontend", Skills = new[] { "Blazor", "CSS" } },
+           new TeamMember { Name = "Member 2", Role = "Backend", Skills = new[] { "C#", "SQL" } },
+           new TeamMember { Name = "Member 3", Role = "Full Stack", Skills = new[] { "C#", "Blazor" } }
+       };
+
+       public class TeamMember
+       {
+           public string Name { get; set; } = "";
+           public string Role { get; set; } = "";
+           public string[] Skills { get; set; } = Array.Empty<string>();
+       }
+   }

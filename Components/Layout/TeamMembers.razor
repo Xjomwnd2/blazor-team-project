@@ -1,0 +1,92 @@
+@page "/team"
+@rendermode InteractiveServer
+
+<PageTitle>Team Members</PageTitle>
+
+<h1>Our Team</h1>
+<p>Meet the talented developers working on this project!</p>
+
+<div class="row mt-4">
+    @foreach (var member in teamMembers)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" 
+                             style="width: 50px; height: 50px; font-size: 24px; font-weight: bold;">
+                            @member.Name.Substring(0, 1)
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="card-title mb-0">@member.Name</h5>
+                            <p class="text-muted mb-0">@member.Role</p>
+                        </div>
+                    </div>
+                    <div>
+                        <strong>Skills:</strong>
+                        <div class="mt-2">
+                            @foreach (var skill in member.Skills)
+                            {
+                                <span class="badge bg-secondary me-1 mb-1">@skill</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="mt-4">
+    <h3>Add New Team Member</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <input @bind="newName" class="form-control mb-2" placeholder="Name" />
+        </div>
+        <div class="col-md-4">
+            <input @bind="newRole" class="form-control mb-2" placeholder="Role" />
+        </div>
+        <div class="col-md-4">
+            <input @bind="newSkills" class="form-control mb-2" placeholder="Skills (comma-separated)" />
+        </div>
+    </div>
+    <button @onclick="AddTeamMember" class="btn btn-primary">Add Team Member</button>
+</div>
+
+@code {
+    private List<TeamMember> teamMembers = new()
+    {
+        new TeamMember { Name = "Joel Mwaura", Role = "Full Stack Developer", Skills = new[] { "C#", "Blazor", "SQL Server" } },
+        new TeamMember { Name = "Team Member 2", Role = "Frontend Developer", Skills = new[] { "Blazor", "CSS", "JavaScript" } },
+        new TeamMember { Name = "Team Member 3", Role = "Backend Developer", Skills = new[] { "ASP.NET", "Entity Framework", "SQL" } }
+    };
+
+    private string newName = "";
+    private string newRole = "";
+    private string newSkills = "";
+
+    private void AddTeamMember()
+    {
+        if (!string.IsNullOrWhiteSpace(newName) && !string.IsNullOrWhiteSpace(newRole))
+        {
+            var skills = newSkills.Split(',').Select(s => s.Trim()).ToArray();
+            teamMembers.Add(new TeamMember 
+            { 
+                Name = newName, 
+                Role = newRole, 
+                Skills = skills 
+            });
+            
+            newName = "";
+            newRole = "";
+            newSkills = "";
+        }
+    }
+
+    public class TeamMember
+    {
+        public string Name { get; set; } = "";
+        public string Role { get; set; } = "";
+        public string[] Skills { get; set; } = Array.Empty<string>();
+    }
+}
